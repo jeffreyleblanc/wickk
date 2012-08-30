@@ -1,0 +1,1 @@
+/*! Wickk-vcore | copyright (2012) Jeffrey LeBlanc LLC, www.jeffreyleblanc.org | all rights reserved */

@@ -1,0 +1,139 @@
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8" />
+    <meta name="viewport" content="user-scalable=no, width=1000" />
+    <title>Wickk : vcore: demo 1</title>
+     
+	<!-- WICKK SOURCE -->
+	<script src="js/wickk-0.1-dependencies.js"></script>
+	<script src="js/wickk-0.1.min.js"></script>
+	<!-- WICKK SOURCE -->
+
+	<link rel="stylesheet" type="text/css" href="css/jUi.css" />
+	<link rel="stylesheet" type="text/css" href="css/demo.css" />
+	
+	<script src="js/rect.js"></script>
+	<script src="js/ellipse.js"></script>
+	<script src="js/text.js"></script>
+	<script src="js/img.js"></script>
+	
+	<style type="text/css" > 
+		canvas{
+			border: 1px solid #999;
+		}
+	
+	</style> 
+	
+	
+
+<!-- Classes -->
+<script id="clss" type="text/javascript">	
+//-- Using aObj
+</script>
+
+<!-- Script -->
+<script id="script" type="text/javascript">
+
+	//-- Global Instances --------------//
+		var CNVS, CTX;
+			
+		function loop(){
+			CNVS.loopstep();
+			//-- Loop Back
+			setTimeout(loop);
+		};
+		
+		function addTestRectangles(){
+			var holder = new vObjBase();
+			CNVS.addC(holder);
+		
+			var tmpR = new rect();
+			tmpR.pos( vVec(100,100) );
+			holder.addC( tmpR );
+			
+			tmpR = new rect();
+			tmpR.P.alpha = 0.5;
+			tmpR.rot( Math.PI/4 );
+			holder.addC( tmpR );
+			
+			var tmpR2 = new rect();
+			tmpR2.pos( vVec(55,50) );
+			tmpR2.draggable = false;
+			tmpR2.P.alpha = 0.5;
+			tmpR.addC( tmpR2 );
+			
+			tmpR = new rect().i(60,30);
+			tmpR.P.fillcolor.RGB(0,0,200);
+			tmpR.pos( vVec(300,300) );
+			holder.addC( tmpR );
+			
+			var E = new ellipse().i(40,40);
+			E.pos( vVec(500,300) );
+			E.rot( Math.PI/3);
+			E.scl( vVec(0.5,1.5) );
+			holder.addC( E );
+			
+			var I = new img()
+				.i('http://localhost/~jeffreyleblanc/jeffreyleblanc.org/media/images/resources/thumbs/ALU_nucIaA0_0x100.jpg');
+			I.pos( vVec(500,100) );
+			holder.addC( I );
+			
+			var T = new text().i('Great to be with you today');
+			T.pos( vVec(300,100) );
+			holder.addC( T );
+		
+		};
+
+	function wirebuttons(){
+		$("#show_inspector").click(function(){
+			CNVS.inspector.show();
+			$("#hide_inspector").show();
+			$(this).hide();
+		}).hide().css("cursor","pointer");
+		$("#hide_inspector").click(function(){
+			CNVS.inspector.hide();
+			$("#show_inspector").show();
+			$(this).hide();
+		}).css("cursor","pointer");
+
+	};
+		
+	$(function(){
+		//-- Launch
+			launchWickk();
+		
+		//--set up canvas
+			CTX = $('#pad')[0].getContext('2d'); //!-- Should phase this out
+			CNVS = new vCanvas();
+			CNVS.attachToCanvas($('#pad'));
+			CNVS.attachToFps($('#fps'));
+			CNVS.inspector.show();
+			
+		//-- Add some test objects
+			addTestRectangles();
+
+		//-- Wire the buttons
+			wirebuttons();
+			
+		//-- Kick Off!
+			loop();
+	});
+	
+</script>
+
+	
+</head>
+
+<body>
+	<h1>Wickk vCore Demo 1</h1>
+	<span id="show_inspector">show inspector</span>
+	<span id="hide_inspector">hide inspector</span>
+	<br><br>
+
+	<!-- Canvas -->
+	<div id="fps">fps</div>
+	<div id="holder"></div> <!-- Holds the Inspector -->
+	<canvas id='pad' width='800' height='600'></canvas>	
+		
+</body> 
+</html> 

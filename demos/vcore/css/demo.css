@@ -1,0 +1,71 @@
+/*== Core Html =================================*/
+
+	body {
+		background-color: white;
+		font-family: Helvetica, sans serif;
+		font-size: 13px;
+		color: #555;
+		margin-left: 50px;
+	}
+	
+	h1 { font-size: 18px;}
+	h2 { font-size: 14px;}
+	
+	a{
+		color: #0066CC;
+		text-decoration: none;
+		cursor: pointer;
+	}
+	a:hover {
+		text-decoration: underline;
+	}
+	
+/*== Pre =================================*/
+	
+	/*-- General ----------------------------*/
+	
+		pre{
+			margin-top:0px;
+			margin-bottom:0px;
+			width: 600px;
+			padding: 2px;
+			/* handle wrapping */
+			white-space: pre-wrap;                 /* CSS3 browsers  */
+			white-space: -moz-pre-wrap !important; /* 1999+ Mozilla  */
+			white-space: -pre-wrap;                /* Opera 4 thru 6 */
+			white-space: -o-pre-wrap;              /* Opera 7 and up */
+			word-wrap: break-word;                 /* IE 5.5+ and up */		
+		}
+	
+		/* SPAN elements with the classes below are added by prettyprint. */
+		.pln { color: #444 }  /* plain text */
+		.str { color: #A00 }  /* string content */
+		.kwd { color: #00A }  /* a keyword */
+		.com { color: #480 }  /* a comment */
+		.typ { color: #444 }  /* a type name */
+		.lit { color: #A00 }  /* a literal value */
+	
+	/*-- Specific ----------------------------*/
+	
+		#classes{
+			margin-left: 24px;
+			width: 700px;
+			padding: 10px;
+			border-left: 3px solid #AAA;
+			background-color: rgb(250,250,250);
+		}
+	
+		#log{
+			margin-left: 24px;
+			width: 700px;
+			padding: 10px;
+			border-left: 3px solid #AAA;
+			background-color: rgb(250,250,250);
+		}
+		#log pre.result{
+			margin-top: 12px;
+			border-left: 8px solid #0066CC;
+			background-color: rgb(230,230,230);
+			padding: 12px;
+			margin-left: 60px;
+		}

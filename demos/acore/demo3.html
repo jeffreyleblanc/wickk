@@ -1,0 +1,114 @@
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8" />
+    <title>Wickk : acore: demo 3</title>
+     
+	<!-- WICKK BEGIN -->
+	<script src="js/wickk-0.1-dependencies.js"></script>
+	<script src="js/wickk-acore-0.1.min.js"></script>
+	<!-- WICKK END -->
+	
+	<script src="js/prettify.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/demo.css" />
+<!-- Logger -->
+<script type="text/javascript">
+function buildLog(){
+	$('#classes').html($('#clss').html());
+	var code_str = $('#script').html();
+	var code = code_str.split('\n');
+	$.each( code, function(k,s){
+		if(s.indexOf("\/\/ignore")!=-1)return;
+		$('#log').append( $('<pre>').addClass('prettyprint').html(s.replace(/(\t|\r\n|\n|\r)/gm,"")) );
+		result = eval( s );
+		if( s.indexOf("\/\/:") > -1){
+			$('#log').append( $('<pre>').addClass('result').html($.dump(result)) );
+		}
+	});
+	prettyPrint();
+};
+</script>
+
+<!-- Classes -->
+<script id="clss" type="text/javascript">	
+var Dog = aObj.$extend({
+	__classvars__ : {
+		aType : 'Dog',
+		kingdom : 'Animals'
+	},				
+	initialize : function(){var Q=this;Q.$super();
+		//-- Create P Attributes
+			Q.P.Name = 'Rex';
+			Q.P.Bark = 'Ruff!';
+			Q.P.Weight = 20;
+		//-- Create U links
+			Q.U.bff = null;
+			Q.U.friends = new aList();
+		//-- General attributes
+			Q.isSmelling = false;
+	},
+	
+	toggleSmelling : function(){var Q=this;
+		Q.isSmelling = !Q.isSmelling;
+	},
+	
+	bark : function(){var Q=this;
+		$.C( Q.P.Bark );
+	}
+});
+</script>
+
+<!-- Script -->
+<script id="script" type="text/javascript">	
+$(function(){//ignore
+	/*-- Setup --*/
+	launchWickk();
+	var world, world2;
+	var dog1, dog2, dog3;
+	/*-- 1. Make dog from json*/
+	dog1 = $a.create('{"aType":"Dog","id":"User-nv56RRM+Dog#1","user":null,"parent":"User-nv56RRM+Dog#0","children":[],"P":{"Name":"Joe","Bark":"Ralf Ralf!!!","Weight":20},"U":{"bff":"User-nv56RRM+Dog#0","friends":["User-nv56RRM+Dog#0"]}}');
+	dog1.j('\t');//:
+	
+	/*-- 2. Make dogs and world*/
+	world = new aObj();
+	dog2 = new Dog();
+	dog3 = new Dog().setP({Name:'Hank',Bark:'Car!'});
+	dog2.U.bff = dog3;
+	dog3.U.bff = dog2;
+	world.addC(dog2);
+	world.addC(dog3);
+	world.j('\t');//:
+	
+	/*-- 3. Clone the world*/
+	world2 = $a.clone(world.j());
+	world2.j('\t');//:
+});//ignore
+</script>
+
+<!-- Build Logged Output -->
+<script type="text/javascript">
+	$(function(){
+		buildLog();
+	});
+</script>
+	
+</head>
+
+<body>
+
+	<h1>Wickk aCore Demo 3</h1>
+	<p id="description">
+	Shows creating and cloning from json.
+	</p>
+	<a onClick='window.location="view-source:" + window.location.href'>
+		View Page Source</a><br>
+	<a href="/acore/demos/">Demo Root Page</a> |
+	<a href="demo2.html">Prev</a> |
+	<a href="demo4.html">Next</a>
+		
+	<h2>Class Definitions</h2>
+	<pre id="classes" class="prettyprint"></pre>
+	<h2>Log</h2>
+	<div id="log"></div>
+	
+</body> 
+</html> 

@@ -1,0 +1,137 @@
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8" />
+    <title>Wickk : acore: demo 6</title>
+     
+	<!-- WICKK BEGIN -->
+	<script src="js/wickk-0.1-dependencies.js"></script>
+	<script src="js/wickk-acore-0.1.min.js"></script>
+	<!-- WICKK END -->
+	
+	<script src="js/prettify.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/demo.css" />
+
+<!-- Logger -->
+<script type="text/javascript">
+function buildLog(){
+	$('#classes').html($('#clss').html());
+	var code_str = $('#script').html();
+	var code = code_str.split('\n');
+	$.each( code, function(k,s){
+		if(s.indexOf("\/\/ignore")!=-1)return;
+		$('#log').append( $('<pre>').addClass('prettyprint').html(s.replace(/(\t|\r\n|\n|\r)/gm,"")+'\n') );
+		result = eval.call(window, s);
+		if( s.indexOf("\/\/:") > -1){
+			$('#log').append( $('<pre>').addClass('result').html($.dump(result)) );
+		}
+	});
+	prettyPrint();
+};
+</script>
+
+<!-- Classes -->
+<script id="clss" type="text/javascript">	
+var Dog = aObj.$extend({
+	__classvars__ : {
+		aType : 'Dog',
+		kingdom : 'Animals'
+	},				
+	initialize : function(){var Q=this;Q.$super();
+		//-- Create P Attributes
+			Q.P.Name = 'Rex';
+			Q.P.Bark = 'Ruff!';
+		//-- Create U links
+			Q.U.friends = new aList();
+		//-- General attributes
+			Q.canBark = true;
+	},
+	
+	bark : function(){var Q=this;
+		if(Q.canBark) return Q.P.Bark;
+	}
+});
+
+var Robot = aObj.$extend({
+	__classvars__ : {
+		aType : 'Robot',
+		kingdom : 'Machines'
+	},				
+	initialize : function(){var Q=this;Q.$super();
+		//-- Create P Attributes
+			Q.P.Name = 'Metal';
+			Q.P.CPU = 'Fast';
+		//-- Create U links
+			Q.U.master = null;
+	},
+	
+	zap : function(){var Q=this;
+		return 'Zap!!!';
+	}
+});
+</script>
+
+<!-- Script -->
+<script id="script" type="text/javascript">	
+$(function(){//ignore
+	/*-- Setup --*/
+	launchWickk();
+	var world, lonelydog;
+	
+	//-- 1. Make the world and a lonely dog
+	world = new aObj();
+	world.id();//:
+	lonelydog = new Dog().setP({Bark:'Where is everyone?'});
+	lonelydog.bark();//:
+	
+	//-- 2. Make some dogs
+	$.each( ['Rufus','Demon','Pug'],function(k,n){world.addC( new Dog().setP({Name:n,Bark:n}) );});
+	
+	//-- 3. Make some robots
+	$.each( ['Chip','Droid','Drone'],function(k,n){world.addC( new Robot().setP({Name:n}) );});
+	
+	//-- 4. Print World
+	$.C('//-- 4. Print World');
+	world.eachC(function(i,c){ $.C( c.P.Name ); });
+	//! Look at javascript console for output
+	
+	//-- 5. Use Registry to make all Dogs bark
+	var list = $a.scan('$Dog');
+	$.C('//-- 5. Use Registry to make all Dogs bark');
+	$.each(list, function(k,v){ $.C( v.bark() ); });
+	//! Look at javascript console for output
+	
+	//-- 6. Use Registry to list Robots
+	$.C('//-- 6. Use Registry to list Robots');
+	$a.act('$Robot', function(v){ $.C( v.P.Name ); });
+	//! Look at javascript console for output
+});//ignore
+</script>
+
+<!-- Build Logged Output -->
+<script type="text/javascript">
+	$(function(){
+		buildLog();
+	});
+</script>
+	
+</head>
+
+<body>
+
+	<h1>Wickk aCore Demo 6</h1>
+	<p id="description">
+	Children, and the Registry
+	</p>
+	<a onClick='window.location="view-source:" + window.location.href'>
+		View Page Source</a><br>
+	<a href="/acore/demos/">Demo Root Page</a> |
+	<a href="demo5.html">Prev</a> |
+	<a href="demo1.html">Next</a>
+		
+	<h2>Class Definitions</h2>
+	<pre id="classes" class="prettyprint"></pre>
+	<h2>Log</h2>
+	<div id="log"></div>
+	
+</body> 
+</html> 

@@ -1,0 +1,40 @@
+{
+	"../src/" : [
+		{"acore/" : [
+			"_license.js",
+			"atool-javascript.js",
+			"atool-misc.js",
+			"atool-jquery.js",
+			"aClassy.js",
+			"aRegistry.js",
+			"aSeed.js",
+			"aList.js",
+			"aCommon.js",
+			"aObj.js"
+		]},
+		{"vcore/" : [
+			"_license.js",
+			"vtool-jquery.js",
+			"vtool-math.js",
+			"vtool-vCanvasRenderer.js",
+			"vVec.js",
+			"vColor.js",
+			"vTransform2D.js",
+			"vEvent.js",
+			"vObjBase.js",
+			"vObj.js",
+			"vCanvas.js",
+			"vEventRouter.js",
+			"vRect.js",
+			"vEllipse.js",
+			"vImage.js",
+			"vTextBox.js"
+		]},
+		{"jcore/" : [
+			"_license.js",
+			"j$.js",
+			"jUi.js",
+			"jInspector.js"
+		]}
+	]
+}

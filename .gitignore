@@ -1,0 +1,9 @@
+*.bbprojectd
+*.bbprojectd/
+*.sublime*
+
+_notes
+
+*.pyc
+
+.DS_STORE

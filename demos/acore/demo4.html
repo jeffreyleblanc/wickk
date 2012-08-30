@@ -1,0 +1,123 @@
+<html lang="en"> 
+<head> 
+    <meta charset="utf-8" />
+    <title>Wickk : acore: demo 4</title>
+     
+	<!-- WICKK BEGIN -->
+	<script src="js/wickk-0.1-dependencies.js"></script>
+	<script src="js/wickk-acore-0.1.min.js"></script>
+	<!-- WICKK END -->
+	
+	<script src="js/prettify.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/demo.css" />
+
+<!-- Logger -->
+<script type="text/javascript">
+function buildLog(){
+	$('#classes').html($('#clss').html());
+	var code_str = $('#script').html();
+	var code = code_str.split('\n');
+	$.each( code, function(k,s){
+		if(s.indexOf("\/\/ignore")!=-1)return;
+		$('#log').append( $('<pre>').addClass('prettyprint').html(s.replace(/(\t|\r\n|\n|\r)/gm,"")) );
+		result = eval( s );
+		if( s.indexOf("\/\/:") > -1){
+			$('#log').append( $('<pre>').addClass('result').html($.dump(result)) );
+		}
+	});
+	prettyPrint();
+};
+</script>
+
+<!-- Classes -->
+<script id="clss" type="text/javascript">	
+//-- Base Class
+	var Dog = aObj.$extend({
+		__classvars__ : {
+			aType : 'Dog',
+			kingdom : 'Animals'
+		},				
+		initialize : function(){var Q=this;Q.$super();
+			//-- Create P Attributes
+				Q.P.Name = 'Rex';
+				Q.P.Bark = 'Ruff!';
+				Q.P.Weight = 20;
+			//-- Create U links
+				Q.U.bff = null;
+				Q.U.friends = new aList();
+			//-- General attributes
+				Q.isSmelling = false;
+		},
+		
+		toggleSmelling : function(){var Q=this;
+			Q.isSmelling = !Q.isSmelling;
+		},
+		
+		bark : function(){var Q=this;
+			$.C( Q.P.Bark );
+		}
+	});
+	
+//-- Inherited Class
+	var SheepDog = Dog.$extend({
+		__classvars__ : {
+			aType : 'SheepDog'
+		},				
+		initialize : function(){var Q=this;Q.$super();
+			//-- Create P Attributes
+				Q.P.Speed = 10;
+			//-- General attributes
+				Q.isSleeping = false;
+		},
+		
+		toggleSleeping : function(){var Q=this;
+			Q.isSleeping = !Q.isSleeping;
+		}
+	});
+</script>
+
+<!-- Script -->
+<script id="script" type="text/javascript">	
+$(function(){//ignore
+	/*-- Setup --*/
+	launchWickk();
+	var dog1;
+	
+	//-- 1. Make derived dog and look at inheritance:
+	dog1 = new SheepDog();
+	dog1.j('\t');//:
+	dog1.type();//:
+	dog1.$parentType();//:
+	dog1.$derivedFrom('aObj');//:
+	Class.$lineage( dog1 );//:
+});//ignore
+</script>
+
+<!-- Build Logged Output -->
+<script type="text/javascript">
+	$(function(){
+		buildLog();
+	});
+</script>
+	
+</head>
+
+<body>
+
+	<h1>Wickk aCore Demo 4</h1>
+	<p id="description">
+	Basic Inheritance.
+	</p>
+	<a onClick='window.location="view-source:" + window.location.href'>
+		View Page Source</a><br>
+	<a href="/acore/demos/">Demo Root Page</a> |
+	<a href="demo3.html">Prev</a> |
+	<a href="demo5.html">Next</a>
+		
+	<h2>Class Definitions</h2>
+	<pre id="classes" class="prettyprint"></pre>
+	<h2>Log</h2>
+	<div id="log"></div>
+	
+</body> 
+</html> 
