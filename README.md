@@ -1,4 +1,4 @@
-### Wickk 0.1: [http://www.wickk.com](wickk.com)
+### Wickk 0.1: http://www.wickk.com
 
 **Wickk is a framework for building visual programs with javascript**
 
