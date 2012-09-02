@@ -5,7 +5,7 @@
 	
 	//-- Internal Globals ------------------------------------------------//
 		var 
-		CLASSY_VERSION = '1.4.tx',
+		CLASSY_VERSION = '1.4.wickk',
 		root = this,
 		old_class = root.Class,
 		disable_constructor = false;

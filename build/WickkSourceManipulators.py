@@ -1,5 +1,5 @@
 #
-#	ThexelSourceManipulators.py
+#	WickkSourceManipulators.py
 #	simple tool to help generate minimized distributions files from src/
 #
 

@@ -199,7 +199,7 @@
 /*== Icons ====================================*/
 
 	/*-- divider --*/
-		.tx-icon-div {
+		.wickk-icon-div {
 			width: 4px; height: 30px;
 			display: block;
 			background-color: #bbb;
@@ -207,83 +207,29 @@
 			margin-right:4px;
 		 }
 		
-	/* Icon image */
-		.tx-icon {
+	/* Icon image -- on ice */
+		.wickk-icon {
 			width: 30px; height: 30px;
 			display: block;
 			text-indent: -99999px;
 			overflow: hidden;
 			background-repeat: no-repeat; 
-			background-image: url(images/tx-sprite.png);
+			/* background-image: url(images/wickk-sprite.png); */
 		}
-		.tx-icon-grad {
-			background-image: url(images/tx-sprite-gradient.png);
+		.wickk-icon-grad {
+			/* background-image: url(images/wickk-sprite-gradient.png); */
 		}
-		.tx-icon-clean {
+		.wickk-icon-clean {
 			width: 30px; height: 30px;
 			display: block;
 			text-indent: -99999px;
 			overflow: hidden;
 			background-repeat: no-repeat; 
-			background-image: url(images/tx-sprite.png);
+			/* background-image: url(images/wickk-sprite.png); */
 		}
 		
 		/* Row 1 */
-		.tx-icon-inspector { background-position: 0 0; }
-		.tx-icon-link { background-position: -30px 0; }
-		.tx-icon-cut { background-position: -60px 0; }
-		.tx-icon-liquify { background-position: -90px 0; }
-		.tx-icon-solidify { background-position: -120px 0; }
-		.tx-icon-gravity { background-position: -150px 0; }
-		.tx-icon-cabinet { background-position: -180px 0; }
-		/* Row 2 */
-		.tx-icon-killmsg { background-position: 0px -30px; }
-		.tx-icon-msg { background-position: -30px -30px; }
-		.tx-icon-clear { background-position: -60px -30px; }
-		.tx-icon-jsonline { background-position: -90px -30px; }
-		.tx-icon-jsonloop { background-position: -120px -30px; }
-		.tx-icon-jsontree { background-position: -150px -30px; }
-		.tx-icon-jsongrid { background-position: -180px -30px; }
-		/* Row 3 */
-		.tx-icon-copy { background-position: 0px -60px; }
-		.tx-icon-paste { background-position: -30px -60px; }
-		.tx-icon-close { background-position: -60px -60px; }
-		.tx-icon-save { background-position: -90px -60px; }
-		.tx-icon-pin { background-position: -120px -60px; }
-		.tx-icon-flag { background-position: -150px -60px; }
-		.tx-icon-question { background-position: -180px -60px; }
-		/* Row 4 */
-		.tx-icon-facebook { background-position: 0px -90px; }
-		.tx-icon-twitter { background-position: -30px -90px; }
-		.tx-icon-portrait { background-position: -60px -90px; }
-		.tx-icon-info { background-position: -90px -90px; }
-		.tx-icon-sandbox { background-position: -120px -90px; }
-		.tx-icon-play { background-position: -150px -90px; }
-		.tx-icon-pause { background-position: -180px -90px; }
-		/* Row 5 */
-		.tx-icon-lock { background-position: 0px -120px; }
-		.tx-icon-unlock { background-position: -30px -120px; }	
-		.tx-icon-msgOn { background-position: -60px -120px; }
-		.tx-icon-msgOff { background-position: -90px -120px; }
-		.tx-icon-tgtOn { background-position: -120px -120px; }
-		.tx-icon-tgtOff { background-position: -150px -120px; }
-		.tx-icon-newmsg { background-position: -180px -120px; }
-		/* Row 6 */
-		/*.tx-icon-unlock { background-position: 0px -150px; }
-		.tx-icon-lock { background-position: -30px -150px; }	
-		.tx-icon-msgOn { background-position: -60px -150px; }*/
-		.tx-icon-grayflag { background-position: -90px -150px; }
-		.tx-icon-redflag { background-position: -120px -150px; }
-		.tx-icon-copyobj { background-position: -150px -150px; }
-		.tx-icon-pasteobj { background-position: -180px -150px; }
-		/* Row 7 */
-		.tx-icon-injectobjon { background-position: 0px -180px; }
-		.tx-icon-injectobjoff { background-position: -30px -180px; }	
-		/*.tx-icon-msgOn { background-position: -60px -180px; }
-		.tx-icon-msgOff { background-position: -90px -180px; }
-		.tx-icon-tgtOn { background-position: -120px -180px; }
-		.tx-icon-tgtOff { background-position: -150px -180px; }
-		.tx-icon-newmsg { background-position: -180px -180px; }*/
+		/* .wickk-icon-inspector { background-position: 0 0; } */
 
 
 	

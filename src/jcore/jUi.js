@@ -16,7 +16,7 @@
 				Q.$super();	
 				//-- Initialize Default Attributes
 					Q.$dflt = Q.$e;						//-- Default Container	
-					Q.baseBttnCls = 'button tx-icon';	//-- Default Button base class
+					Q.baseBttnCls = 'button wickk-icon';	//-- Default Button base class
 					Q.dfltInputTxtClr = '#777';			//-- Default Input Static Text Color
 					Q.dfltInputTxtClrEdit = 'red';		//-- Default Input Edit Text Color
 			},
