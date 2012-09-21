@@ -3,6 +3,8 @@
 *.sublime*
 
 _notes
+build/export_src.py
+build/make.json
 
 *.pyc
 
