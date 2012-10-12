@@ -191,7 +191,7 @@
 	
 	//-- Internal Globals ------------------------------------------------//
 		var 
-		CLASSY_VERSION = '1.4.tx',
+		CLASSY_VERSION = '1.4.wickk',
 		root = this,
 		old_class = root.Class,
 		disable_constructor = false;
@@ -2282,6 +2282,7 @@
 		//-- Operations ------------------------------------//
 				
 			//-- this*v
+			// Note the implicit usage of homogenous coordinates
 			apply_v : function( v ){var Q=this;
 				var tmpV = new vVec();
 				tmpV.x = Q.e[0][0]*v.x + Q.e[0][1]*v.y + Q.e[0][2];
@@ -2304,6 +2305,20 @@
 				return N;
 			},
 			
+			apply_as_inverse : function( v ){ var Q=this;
+				var det = Q.e[0][0]*Q.e[1][1]-Q.e[0][1]*Q.e[1][0]; //!-- IF d == 0???
+				if(det === 0)
+					return null;
+				var DX = v.x - Q.e[0][2];
+				var DY = v.y - Q.e[1][2];
+				var tmpV = new vVec();
+				det = 1.0/det;
+				tmpV.x = det * ( Q.e[1][1]*DX - Q.e[0][1]*DY );
+				tmpV.y = det * ( Q.e[0][0]*DY - Q.e[1][0]*DX );
+				return tmpV;
+			},
+
+			/*
 			//!-- what is this? applying an inverse matrix?
 			apply_vi : function( v ){var Q=this;
 				var tmpV = new vVec();
@@ -2324,6 +2339,7 @@
 				else
 					return new vTransform2D(Q.e[1][1]/d, -1*Q.e[0][1]/d, -1*Q.e[1][0]/d, Q.e[0][0]/d, -1*Q.e[0][2], -1*Q.e[1][2]);
 			},
+			*/
 		
 		//-- i/o ------------------------------------//
 		
@@ -2595,8 +2611,7 @@
 			//-- Frame of Reference Translation Functions ------------------------//
 				
 				canvasToLocal : function(v){
-					var Inv = this.gTF.getInverse(); //!-- Check for null
-					return Inv.apply_vi(v.copy());
+					return this.gTF.apply_as_inverse( v );
 				},
 				
 				canvasToParent : function(v){
@@ -2607,13 +2622,13 @@
 					return this.TF.apply_v(v||vVec());
 				},
 				
-				localToCanvas : function(vec){
-					return this.gTF.apply_v(vec||vVec());
+				localToCanvas : function(v){
+					return this.gTF.apply_v(v||vVec());
 				},
 				
-				localToScreen : function(vec){
+				localToScreen : function(v){
 					var Q=this;
-					return Q.localToCanvas(vec||vVec()).add(Q.cnvs.screenPos);
+					return Q.localToCanvas(v||vVec()).add(Q.cnvs.screenPos);
 				},
 				
 				
@@ -3823,7 +3838,7 @@
 				Q.$super();	
 				//-- Initialize Default Attributes
 					Q.$dflt = Q.$e;						//-- Default Container	
-					Q.baseBttnCls = 'button tx-icon';	//-- Default Button base class
+					Q.baseBttnCls = 'button wickk-icon';	//-- Default Button base class
 					Q.dfltInputTxtClr = '#777';			//-- Default Input Static Text Color
 					Q.dfltInputTxtClrEdit = 'red';		//-- Default Input Edit Text Color
 			},

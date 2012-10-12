@@ -93,6 +93,8 @@
 		
 		//-- Operations ------------------------------------//
 				
+			// Note the implicit usage of homogenous coordinates
+
 			//-- this*v
 			apply_v : function( v ){var Q=this;
 				var tmpV = new vVec();
@@ -116,25 +118,18 @@
 				return N;
 			},
 			
-			//!-- what is this? applying an inverse matrix?
-			apply_vi : function( v ){var Q=this;
-				var tmpV = new vVec();
-				var x = v.x + Q.e[0][2];
-				var y = v.y + Q.e[1][2];
-				//-- Not sure why here...
-				tmpV.x = Q.e[0][0]*x + Q.e[0][1]*y;
-				tmpV.y = Q.e[1][0]*x + Q.e[1][1]*y;
-				tmpV.z = v.z;
-				return tmpV;
-			},
-			
-			//-- When using this, need to check for null return
-			getInverse : function(){var Q=this;
-				var d = Q.e[0][0]*Q.e[1][1]-Q.e[0][1]*Q.e[1][0]; //!-- IF d == 0???
-				if(d === 0)
+			//-- this'*v
+			apply_as_inverse : function( v ){ var Q=this;
+				var det = Q.e[0][0]*Q.e[1][1]-Q.e[0][1]*Q.e[1][0]; //!-- IF d == 0???
+				if(det === 0)
 					return null;
-				else
-					return new vTransform2D(Q.e[1][1]/d, -1*Q.e[0][1]/d, -1*Q.e[1][0]/d, Q.e[0][0]/d, -1*Q.e[0][2], -1*Q.e[1][2]);
+				var DX = v.x - Q.e[0][2];
+				var DY = v.y - Q.e[1][2];
+				var tmpV = new vVec();
+				det = 1.0/det;
+				tmpV.x = det * ( Q.e[1][1]*DX - Q.e[0][1]*DY );
+				tmpV.y = det * ( Q.e[0][0]*DY - Q.e[1][0]*DX );
+				return tmpV;
 			},
 		
 		//-- i/o ------------------------------------//

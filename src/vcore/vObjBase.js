@@ -225,8 +225,7 @@
 			//-- Frame of Reference Translation Functions ------------------------//
 				
 				canvasToLocal : function(v){
-					var Inv = this.gTF.getInverse(); //!-- Check for null
-					return Inv.apply_vi(v.copy());
+					return this.gTF.apply_as_inverse( v );
 				},
 				
 				canvasToParent : function(v){
@@ -237,13 +236,13 @@
 					return this.TF.apply_v(v||vVec());
 				},
 				
-				localToCanvas : function(vec){
-					return this.gTF.apply_v(vec||vVec());
+				localToCanvas : function(v){
+					return this.gTF.apply_v(v||vVec());
 				},
 				
-				localToScreen : function(vec){
+				localToScreen : function(v){
 					var Q=this;
-					return Q.localToCanvas(vec||vVec()).add(Q.cnvs.screenPos);
+					return Q.localToCanvas(v||vVec()).add(Q.cnvs.screenPos);
 				},
 				
 				
