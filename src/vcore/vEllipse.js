@@ -5,7 +5,7 @@
 
 ;(function(){var root=this;
 	
-	root.vEllipse = vObjBase.$extend({
+	root.vEllipse = vObj.$extend({
 		//-- Class Vars ------------------------------------------------//
 			__classvars__ : {
 				aType : 'vEllipse'

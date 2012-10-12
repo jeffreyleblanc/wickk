@@ -5,7 +5,7 @@
 
 ;(function(){var root=this;
 	
-	root.vRect = vObjBase.$extend({
+	root.vRect = vObj.$extend({
 		//-- Class Vars ------------------------------------------------//
 			__classvars__ : {
 				aType : 'vRect'

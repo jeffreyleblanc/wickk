@@ -3349,7 +3349,7 @@
 
 ;(function(){var root=this;
 	
-	root.vRect = vObjBase.$extend({
+	root.vRect = vObj.$extend({
 		//-- Class Vars ------------------------------------------------//
 			__classvars__ : {
 				aType : 'vRect'
@@ -3413,7 +3413,7 @@
 
 ;(function(){var root=this;
 	
-	root.vEllipse = vObjBase.$extend({
+	root.vEllipse = vObj.$extend({
 		//-- Class Vars ------------------------------------------------//
 			__classvars__ : {
 				aType : 'vEllipse'
@@ -3562,7 +3562,7 @@
 
 ;(function(){var root=this;
 	
-	root.vTextBox = vObjBase.$extend({
+	root.vTextBox = vObj.$extend({
 		//-- Class Vars ------------------------------------------------//
 			__classvars__ : {
 				aType : 'vTextBox'

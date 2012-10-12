@@ -5,7 +5,7 @@
 
 ;(function(){var root=this;
 	
-	root.vTextBox = vObjBase.$extend({
+	root.vTextBox = vObj.$extend({
 		//-- Class Vars ------------------------------------------------//
 			__classvars__ : {
 				aType : 'vTextBox'
