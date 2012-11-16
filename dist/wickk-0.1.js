@@ -2313,8 +2313,9 @@
 			//-- this'*v
 			apply_as_inverse : function( v ){ var Q=this;
 				var det = Q.e[0][0]*Q.e[1][1]-Q.e[0][1]*Q.e[1][0]; //!-- IF d == 0???
-				if(det === 0)
+				if(det == 0){
 					return null;
+				}
 				var DX = v.x - Q.e[0][2];
 				var DY = v.y - Q.e[1][2];
 				var tmpV = new vVec();
@@ -2339,7 +2340,6 @@
 * wickk - vEvent.js
 * copyright 2012 by Jeffrey LeBlanc LLC. 
 */
-
 
 ;(function(){var root=this;
 
@@ -2378,35 +2378,6 @@
 
 }).call(this);
 
-///////////
-/*
-;(function(){var root=this;
-	
-	root.vEvent = aSeed.$extend({
-	
-		__isPrimitive__ : true,
-	
-		__init__: function($je) {
-			this.etype = '';			//-- Event type
-			this.$je = $je||null; 	//-- Jquery event object
-			this.spatial = false;	//-- Whether the event is spatial or not
-			this.gpos = vVec();		//-- Canvas positon of the event
-			this.lpos = vVec();		//-- Local position of the event
-			this.global	= false;	//-- Whether the event is 'global'
-			this.mDown = false;		//-- If the mouse is down
-		},
-		
-		type : function(){
-			return 'vEvent';
-		},
-		
-		cleanType : function(){
-			return this.etype.replace('_','');
-		}
-	
-	}); //-- End vEvent Class
-	
-}).call(this);*/
 /*
 * wickk - vObjBase.js
 * copyright 2012 by Jeffrey LeBlanc LLC. 
@@ -2486,6 +2457,7 @@
 					if(Q.ctx==null || Q.visible==false)return;
 					Q.ctx.save();
 					//-- Update Transform (TRS)
+						Q.TF.setI();
 						Q.TF.setXY(Q.P.pos);
 						if(Q.TRS.rot){ Q.TF.setROT(-Q.P.rot); }
 						if(Q.TRS.scl){ Q.TF = Q.TF.x(vTransform2D().setSCL(Q.P.scl.x,Q.P.scl.y)); }
@@ -2593,8 +2565,9 @@
 					this.TRS.scl = true;
 					if($.atype(scaler)=='vVec')
 						this.P.scl.scale(scaler);
-					else
+					else{
 						this.P.scl.mult(scaler);
+					}
 				},
 				
 			//-- Hit Testing -----------------------------------//
@@ -2634,7 +2607,10 @@
 			//-- Frame of Reference Translation Functions ------------------------//
 				
 				canvasToLocal : function(v){
-					return this.gTF.apply_as_inverse( v );
+					var hold =  this.gTF.apply_as_inverse( v );
+					if( hold == null )
+						$.C('NULL!!!');
+					return hold;
 				},
 				
 				canvasToParent : function(v){

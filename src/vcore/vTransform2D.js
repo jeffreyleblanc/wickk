@@ -119,8 +119,9 @@
 			//-- this'*v
 			apply_as_inverse : function( v ){ var Q=this;
 				var det = Q.e[0][0]*Q.e[1][1]-Q.e[0][1]*Q.e[1][0]; //!-- IF d == 0???
-				if(det === 0)
+				if(det == 0){
 					return null;
+				}
 				var DX = v.x - Q.e[0][2];
 				var DY = v.y - Q.e[1][2];
 				var tmpV = new vVec();

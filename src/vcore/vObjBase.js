@@ -77,6 +77,7 @@
 					if(Q.ctx==null || Q.visible==false)return;
 					Q.ctx.save();
 					//-- Update Transform (TRS)
+						Q.TF.setI();
 						Q.TF.setXY(Q.P.pos);
 						if(Q.TRS.rot){ Q.TF.setROT(-Q.P.rot); }
 						if(Q.TRS.scl){ Q.TF = Q.TF.x(vTransform2D().setSCL(Q.P.scl.x,Q.P.scl.y)); }
@@ -184,8 +185,9 @@
 					this.TRS.scl = true;
 					if($.atype(scaler)=='vVec')
 						this.P.scl.scale(scaler);
-					else
+					else{
 						this.P.scl.mult(scaler);
+					}
 				},
 				
 			//-- Hit Testing -----------------------------------//
@@ -225,7 +227,10 @@
 			//-- Frame of Reference Translation Functions ------------------------//
 				
 				canvasToLocal : function(v){
-					return this.gTF.apply_as_inverse( v );
+					var hold =  this.gTF.apply_as_inverse( v );
+					if( hold == null )
+						$.C('NULL!!!');
+					return hold;
 				},
 				
 				canvasToParent : function(v){
