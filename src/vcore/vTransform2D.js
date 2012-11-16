@@ -4,26 +4,24 @@
 */
 
 ;(function(){var root=this;
-	
-	root.vTransform2D = aSeed.$extend({
-	
-		__isPrimitive__ : true,
-	
-		__classvars__ : {
 
-		},
-	
-		//-- Constructor ------------------------------------//
-		
-			__init__: function(a, b, c, d, x, y) {
-				this.e = [
-					[a||0, b||0, x||0],
-					[c||0, d||0, y||0],
-					[0, 0, 1]
-				];
-				return this;
-			},
-		
+	root.vTransform2D = function(a, b, c, d, x, y){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(a, b, c, d, x, y); 
+
+		this.e = [
+			[a||0, b||0, x||0],
+			[c||0, d||0, y||0],
+			[0, 0, 1]
+		];
+	};
+
+	root.vTransform2D.$class = {
+		// Empty
+	};
+
+	root.vTransform2D.prototype =  {
+
 		//-- Meta ------------------------------------//
 
 			type : function(){
@@ -140,6 +138,6 @@
 					C('| '+Q.e[i][0]+','+Q.e[i][1]+','+Q.e[i][2]+' |');
 			}
 
-	});
+	};// END PROTOTYPE
 
 }).call(this);

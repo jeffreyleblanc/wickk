@@ -661,17 +661,23 @@
 
 ;(function(){var root=this;
 
-	root.aList = aSeed.$extend({
-			
-		//--------------------------------------------------//
-		
-			__classvars__ : {
-				aType : 'aList'
+	root.aList = function(){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(); 
+
+	   this.L = new Array();
+	};
+
+	root.aList.prototype =  {
+
+		//-- Wickk methods ----------------//
+
+			type : function() {
+				return 'aList'; 
 			},
 			
-			__init__: function(){var Q=this;
-				Q.L = new Array();
-				return Q;
+			ISatype : function(){
+				return true;
 			},
 			
 		//-- Meta methods ----------------//
@@ -779,9 +785,9 @@
 					out.push( v.id() ); });
 				return out;
 			}
-	});
-}).call(this);
+	};
 
+}).call(this);
 /*
 * wickk - aCommon.js
 * copyright 2012 by Jeffrey LeBlanc LLC. 
@@ -1618,41 +1624,40 @@
 */
 
 ;(function(){var root=this;
-	
-	root.vVec = aSeed.$extend({
-	
-		__isPrimitive__ : true,
-	
-		__classvars__ : {
-			
-			dot : function( v1, v2 ){
-				return  v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-			},
-			
-			midPoint : function(v1,v2){
-				return new vVec( (v1.x+v2.x)/2, (v1.y+v2.y)/2, (v1.z+v2.z/2) );
-			},
-			
-			tangentAlong : function(v1,v2,amt){
-				var tangent = v1.copy().sub(v2);
-				return tangent.mult(amt||1.0);
-			},
-			
-			project : function( base, other ){
-				var mD = vVec.dot(base,other);
-				var bD = vVec.dot(base,base);
-				return base.copy().mult(mD/bD);
-			}
-		},
-	
-		__init__: function(x, y, z) {
-			this.atype = 'vVec'; //-- currently necessary since this is a primitive
-			this.x = x||0;
-			this.y = y||0;
-			this.z = z||0;
-			return this;
+
+	root.vVec = function(x, y, z){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(x, y, z); 
+
+		this.x = x||0;
+		this.y = y||0;
+		this.z = z||0;
+	};
+
+	root.vVec.$class = {
+		
+		dot : function( v1, v2 ){
+			return  v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 		},
 		
+		midPoint : function(v1,v2){
+			return new vVec( (v1.x+v2.x)/2, (v1.y+v2.y)/2, (v1.z+v2.z/2) );
+		},
+		
+		tangentAlong : function(v1,v2,amt){
+			var tangent = v1.copy().sub(v2);
+			return tangent.mult(amt||1.0);
+		},
+		
+		project : function( base, other ){
+			var mD = vVec.dot(base,other);
+			var bD = vVec.dot(base,base);
+			return base.copy().mult(mD/bD);
+		}
+	};
+
+	root.vVec.prototype =  {
+
 		//-- Typing ------------------------------------//
 		
 			type : function(){
@@ -1910,9 +1915,9 @@
 				this.x = json.x;
 				this.y = json.y;
 			}
-	
-	}); //End vVec Class
-	
+
+	}; // END PROTOTYPE
+
 }).call(this);
 /*
 * wickk - vColor.js
@@ -1920,35 +1925,35 @@
 */
 
 ;(function(){var root=this;
-	
-	root.vColor = aSeed.$extend({
-	
-		__isPrimitive__ : true,
-	
-		__classvars__ : {
-			mix : function(c1,c2){
-				return new vColor( (c1.r+c2.r)/2, (c1.g+c2.g)/2, (c1.b+c2.b)/2, 1);
-			},
-			
-			mixerize : function(c1,c2,a1){
-				var a2 = 1.0-a1; 
-				return new vColor( a1*c1.r+a2*c2.r, a1*c1.g+a2*c2.g, a1*c1.b+a2*c2.b, (c1.a+c2.a)/2);
-			}
-			
-		},
-	
-		__init__: function(r, g, b, a) {
-			this.atype = 'vColor';
-			this.r = r||1;
-			this.g = g||1;
-			this.b = b||1;
-			this.a = a||1;
-			
-			this.rgb = 'rgb(0,0,0';
-			this.rgba = 'rgba(0,0,0,0)';
-			this.flatten();
+
+	root.vColor = function(r, g, b, a){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(r, g, b, a); 
+
+		this.r = r||1;
+		this.g = g||1;
+		this.b = b||1;
+		this.a = a||1;
+		
+		this.rgb = 'rgb(0,0,0';
+		this.rgba = 'rgba(0,0,0,0)';
+		this.flatten();
+	};
+
+	root.vColor.$class = {
+		
+		mix : function(c1,c2){
+			return new vColor( (c1.r+c2.r)/2, (c1.g+c2.g)/2, (c1.b+c2.b)/2, 1);
 		},
 		
+		mixerize : function(c1,c2,a1){
+			var a2 = 1.0-a1; 
+			return new vColor( a1*c1.r+a2*c2.r, a1*c1.g+a2*c2.g, a1*c1.b+a2*c2.b, (c1.a+c2.a)/2);
+		}
+	};
+
+	root.vColor.prototype =  {
+
 		//-- Typing ------------------------------------//
 		
 			type : function(){
@@ -2182,36 +2187,35 @@
 				}
 				return this;
 			}
-	
-	}); //End vColor Class
-	
+
+	}; //END PROTOTYPE
+
 }).call(this);
+
 /*
 * wickk - vTransform2D.js
 * copyright 2012 by Jeffrey LeBlanc LLC. 
 */
 
 ;(function(){var root=this;
-	
-	root.vTransform2D = aSeed.$extend({
-	
-		__isPrimitive__ : true,
-	
-		__classvars__ : {
 
-		},
-	
-		//-- Constructor ------------------------------------//
-		
-			__init__: function(a, b, c, d, x, y) {
-				this.e = [
-					[a||0, b||0, x||0],
-					[c||0, d||0, y||0],
-					[0, 0, 1]
-				];
-				return this;
-			},
-		
+	root.vTransform2D = function(a, b, c, d, x, y){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(a, b, c, d, x, y); 
+
+		this.e = [
+			[a||0, b||0, x||0],
+			[c||0, d||0, y||0],
+			[0, 0, 1]
+		];
+	};
+
+	root.vTransform2D.$class = {
+		// Empty
+	};
+
+	root.vTransform2D.prototype =  {
+
 		//-- Meta ------------------------------------//
 
 			type : function(){
@@ -2328,7 +2332,7 @@
 					C('| '+Q.e[i][0]+','+Q.e[i][1]+','+Q.e[i][2]+' |');
 			}
 
-	});
+	};// END PROTOTYPE
 
 }).call(this);
 /*
@@ -2336,6 +2340,46 @@
 * copyright 2012 by Jeffrey LeBlanc LLC. 
 */
 
+
+;(function(){var root=this;
+
+	root.vEvent = function($je){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee($je); 
+
+		this.etype = '';		//-- Event type
+		this.$je = $je||null; 	//-- Jquery event object
+		this.spatial = false;	//-- Whether the event is spatial or not
+		this.gpos = vVec();		//-- Canvas positon of the event
+		this.lpos = vVec();		//-- Local position of the event
+		this.global	= false;	//-- Whether the event is 'global'
+		this.mDown = false;		//-- If the mouse is down
+	};
+
+	root.vEvent.$class = {
+		// Empty;
+	};
+
+	root.vEvent.prototype =  {
+		
+		ISatype : function(){
+			return true;
+		},
+
+		type : function(){
+			return 'vEvent';
+		},
+		
+		cleanType : function(){
+			return this.etype.replace('_','');
+		}
+
+	};
+
+}).call(this);
+
+///////////
+/*
 ;(function(){var root=this;
 	
 	root.vEvent = aSeed.$extend({
@@ -2362,7 +2406,7 @@
 	
 	}); //-- End vEvent Class
 	
-}).call(this);
+}).call(this);*/
 /*
 * wickk - vObjBase.js
 * copyright 2012 by Jeffrey LeBlanc LLC. 

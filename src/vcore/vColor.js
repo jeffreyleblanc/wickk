@@ -4,35 +4,35 @@
 */
 
 ;(function(){var root=this;
-	
-	root.vColor = aSeed.$extend({
-	
-		__isPrimitive__ : true,
-	
-		__classvars__ : {
-			mix : function(c1,c2){
-				return new vColor( (c1.r+c2.r)/2, (c1.g+c2.g)/2, (c1.b+c2.b)/2, 1);
-			},
-			
-			mixerize : function(c1,c2,a1){
-				var a2 = 1.0-a1; 
-				return new vColor( a1*c1.r+a2*c2.r, a1*c1.g+a2*c2.g, a1*c1.b+a2*c2.b, (c1.a+c2.a)/2);
-			}
-			
-		},
-	
-		__init__: function(r, g, b, a) {
-			this.atype = 'vColor';
-			this.r = r||1;
-			this.g = g||1;
-			this.b = b||1;
-			this.a = a||1;
-			
-			this.rgb = 'rgb(0,0,0';
-			this.rgba = 'rgba(0,0,0,0)';
-			this.flatten();
+
+	root.vColor = function(r, g, b, a){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(r, g, b, a); 
+
+		this.r = r||1;
+		this.g = g||1;
+		this.b = b||1;
+		this.a = a||1;
+		
+		this.rgb = 'rgb(0,0,0';
+		this.rgba = 'rgba(0,0,0,0)';
+		this.flatten();
+	};
+
+	root.vColor.$class = {
+		
+		mix : function(c1,c2){
+			return new vColor( (c1.r+c2.r)/2, (c1.g+c2.g)/2, (c1.b+c2.b)/2, 1);
 		},
 		
+		mixerize : function(c1,c2,a1){
+			var a2 = 1.0-a1; 
+			return new vColor( a1*c1.r+a2*c2.r, a1*c1.g+a2*c2.g, a1*c1.b+a2*c2.b, (c1.a+c2.a)/2);
+		}
+	};
+
+	root.vColor.prototype =  {
+
 		//-- Typing ------------------------------------//
 		
 			type : function(){
@@ -266,7 +266,7 @@
 				}
 				return this;
 			}
-	
-	}); //End vColor Class
-	
+
+	}; //END PROTOTYPE
+
 }).call(this);

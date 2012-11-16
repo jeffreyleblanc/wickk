@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 #
 #	update_demos.py
 #	refreshes wickk source in demos/ from current dist/

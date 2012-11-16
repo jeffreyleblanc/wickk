@@ -4,41 +4,40 @@
 */
 
 ;(function(){var root=this;
-	
-	root.vVec = aSeed.$extend({
-	
-		__isPrimitive__ : true,
-	
-		__classvars__ : {
-			
-			dot : function( v1, v2 ){
-				return  v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-			},
-			
-			midPoint : function(v1,v2){
-				return new vVec( (v1.x+v2.x)/2, (v1.y+v2.y)/2, (v1.z+v2.z/2) );
-			},
-			
-			tangentAlong : function(v1,v2,amt){
-				var tangent = v1.copy().sub(v2);
-				return tangent.mult(amt||1.0);
-			},
-			
-			project : function( base, other ){
-				var mD = vVec.dot(base,other);
-				var bD = vVec.dot(base,base);
-				return base.copy().mult(mD/bD);
-			}
-		},
-	
-		__init__: function(x, y, z) {
-			this.atype = 'vVec'; //-- currently necessary since this is a primitive
-			this.x = x||0;
-			this.y = y||0;
-			this.z = z||0;
-			return this;
+
+	root.vVec = function(x, y, z){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(x, y, z); 
+
+		this.x = x||0;
+		this.y = y||0;
+		this.z = z||0;
+	};
+
+	root.vVec.$class = {
+		
+		dot : function( v1, v2 ){
+			return  v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 		},
 		
+		midPoint : function(v1,v2){
+			return new vVec( (v1.x+v2.x)/2, (v1.y+v2.y)/2, (v1.z+v2.z/2) );
+		},
+		
+		tangentAlong : function(v1,v2,amt){
+			var tangent = v1.copy().sub(v2);
+			return tangent.mult(amt||1.0);
+		},
+		
+		project : function( base, other ){
+			var mD = vVec.dot(base,other);
+			var bD = vVec.dot(base,base);
+			return base.copy().mult(mD/bD);
+		}
+	};
+
+	root.vVec.prototype =  {
+
 		//-- Typing ------------------------------------//
 		
 			type : function(){
@@ -296,7 +295,7 @@
 				this.x = json.x;
 				this.y = json.y;
 			}
-	
-	}); //End vVec Class
-	
+
+	}; // END PROTOTYPE
+
 }).call(this);

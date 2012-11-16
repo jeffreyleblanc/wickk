@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 #
 #	make_dist.py
 #	populates the dist/ directory with source compressed to single files

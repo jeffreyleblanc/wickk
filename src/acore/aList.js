@@ -5,17 +5,23 @@
 
 ;(function(){var root=this;
 
-	root.aList = aSeed.$extend({
-			
-		//--------------------------------------------------//
-		
-			__classvars__ : {
-				aType : 'aList'
+	root.aList = function(){
+	  if( !(this instanceof arguments.callee) ) 
+	    return new arguments.callee(); 
+
+	   this.L = new Array();
+	};
+
+	root.aList.prototype =  {
+
+		//-- Wickk methods ----------------//
+
+			type : function() {
+				return 'aList'; 
 			},
 			
-			__init__: function(){var Q=this;
-				Q.L = new Array();
-				return Q;
+			ISatype : function(){
+				return true;
 			},
 			
 		//-- Meta methods ----------------//
@@ -123,5 +129,6 @@
 					out.push( v.id() ); });
 				return out;
 			}
-	});
+	};
+
 }).call(this);
