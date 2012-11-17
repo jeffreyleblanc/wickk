@@ -19,6 +19,7 @@
 	
 			__init__: function() {
 				this.Registry = new Array();
+				this.count = 0; // Count of total aObj made
 			},
 		
 		//-- Array Functions ---------------------------//
@@ -38,6 +39,7 @@
 			register : function(ptr){var Q=this;
 				if( ! $.ISatype(ptr) ) return null;
 				Q.Registry.push( new aEntry(ptr.id(), ptr) );
+				Q.count += 1; // Update total count
 			},
 			
 			registerAs : function(ptr, alias){var Q=this;

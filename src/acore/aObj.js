@@ -27,6 +27,7 @@
 				//-- Generate id
 					Q.id_ = null;
 					if(initFlag!='recreate') Q.setid( Q.makeid() );
+					Q.mid = this.CMN().Registry.count; // micro id
 				//-- Update class count
 					Q.$class.$count++;
 				//-- Others / Meta
@@ -235,6 +236,10 @@
 			getpOid : function(){var Q=this;
 				return ( Q.pO )? Q.pO.id():'null';
 			},
+
+			getpOmid : function(){var Q=this;
+				return ( Q.pO )? Q.pO.mid:'null';
+			},
 		
 		//-- Children Functions ------------------------------------------------//
 		
@@ -322,6 +327,16 @@
 					});
 					return out;
 				},
+
+				jCjm : function(){var Q=this;
+					var out = [];
+					Q.cO.each( function(i,e){
+						if(e.serializableByParent){
+							out.push(e.jOm()); }
+					});
+					return out;
+				},
+			
 			
 			//-- Links -------------------------//
 			
@@ -334,6 +349,24 @@
 								tmpU[k] = Q.U[k].id();
 							}else{
 								tmpU[k] = Q.U[k].j();
+							}
+						}
+						else
+							tmpU[k] = null;
+						count++;
+					}
+					return tmpU;
+				},
+
+				//!-- Check for full fitness
+				jUm : function(){var Q=this;
+					var tmpU={};var count=0;
+					for( k in Q.U ){
+						if( Q.U[k] != null ){
+							if( Q.U[k].type() != 'aList'){
+								tmpU[k] = Q.U[k].mid;
+							}else{
+								tmpU[k] = Q.U[k].jm();
 							}
 						}
 						else
@@ -358,6 +391,29 @@
 				
 				j : function(pretty){var Q=this;
 					return JSON.stringify(Q.jO(), null, pretty||'' );
+				},
+
+				jOm : function(){var Q=this;
+					//var Uid = { timecreated:Q.timecreated, index:Q.index, R:Q.user};
+					//return $.extend({},{Y:Q.type(), I:Q.mid},Uid,{pO: Q.getpOmid(), cO:Q.jCjm()}, {P:Q.jP()}, {U:Q.jUm()} );
+
+					return $.extend({},{Y:Q.type(), I:Q.mid},{pO: Q.getpOmid(), cO:Q.jCjm()}, {P:Q.jP()}, {U:Q.jUm()} );
+				},
+
+				decimalize : function( str, prcs ){
+					patt = /\d+\.\d+/gi ;
+					fpatt = RegExp('\\d+(\\.\\d{1,'+ prcs.toString()+'})?');
+					return str.replace( patt, function(m){ return m.match(fpatt)[0] ; } );
+				},
+
+				// match only { ... }
+				// patt = /\{[^/{/}]+\}/gi
+				
+				jm : function(pretty){var Q=this;
+					return Q.decimalize(
+						JSON.stringify(Q.jOm(), null, pretty||'' ),
+						5
+					);
 				},
 			
 		//-- Parameter Functions ------------------------------------------------//	

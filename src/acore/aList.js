@@ -128,6 +128,13 @@
 				Q.each( function(i,v){
 					out.push( v.id() ); });
 				return out;
+			},
+
+			jm : function(){var Q=this;
+				var out = [];
+				Q.each( function(i,v){
+					out.push( v.mid ); });
+				return out;
 			}
 	};
 
