@@ -150,16 +150,20 @@
 	RGX = {
 
 		// Static Patterns
-		pattX  : /\d+\.\d+/gi ,
-		patt29 : /[2-9]\.\d+/gi ,
-		pattXX : /\d{2}\.\d+/gi ,
-		patt01 : /[^\d][0-1]\.\d+/gi ,
+		pattX  : /\d+\.\d+/g ,
+		patt29 : /[2-9]\.\d+/g ,
+		pattXX : /\d{2}\.\d+/g ,
+		patt01 : /[^\d][0-1]\.\d+/g ,
 
+		// forces all floats above a certain precision to a fixed precision. no rounding.
 		decimalize : function( str, prcs ){
 			fpatt = RegExp('\\d+(\\.\\d{1,'+ prcs.toString()+'})?');
 			return str.replace( this.pattX, function(m){ return m.match(fpatt)[0] ; } );
 		},
 
+		// 	forces all floats above a certain precision to fixed precision.
+		//	However, if fabs( num ) < 2.0, the precision is set to the last <num precision >
+		//	non zero digits following '.' thus if prcs=3 0.001234567 -> 0.00123 and not 0.001
 		decimalize0 : function( str, prcs ){
 			floatpatt = RegExp('\\d+(\\.\\d{1,'+ prcs.toString()+'})?');
 			floatpatt0 = RegExp('[^\\d]\\d+(\\.0*\\d{1,'+ prcs.toString()+'})?');
@@ -170,70 +174,11 @@
 			return str;
 		},
 
-		findObj : function( str ){
-			patt = /\{[^/{/}]+\}/gi;
-			return str.match( patt );
-		},
-
-		findPos : function( str ){
-			patt = /"pos":\{[^/{/}]+\}/gi;
-			return str.match( patt );
-		},
-
+		// finds all "pos":{} and set precision. Used since high precision of location not always needed.
 		setPos : function( str, prcs ){
-			patt = /"pos":\{[^/{/}]+\}/gi;
+			patt = /"pos":\s*\{[^/{/}]+\}/gi;
 			var Q = this;
 			return str.replace( patt, function(m){ return Q.decimalize(m,prcs) ; } );
-		},
-
-		minify : function ( str ){
-			str = this.setPos( str, 1 );
-			str = this.decimalize0( str, 3 );
-
-			var dict = R.genTypes( str );
-			for ( var key in dict ){
-				var val = dict[key].toString()
-				fpatt2 = RegExp(key, "g");
-				str = str.replace(fpatt2,val);
-			}
-			var keysjson = JSON.stringify(dict, null, '' );
-			return '{"K":'+keysjson+',"O":'+str+'}';
-		},
-
-		decompressToObj : function(str){
-			// Now, instead, can we find and pull out the keys?
-			patt = /"K":\{[^/{/}]+\},/gi;
-			var k;
-			var str = str.replace(patt,function(m){k=m.replace('"K":','').replace('},','}');return '';} );
-			// Apply k to o
-			dict = JSON.parse(k)
-			for ( var key in dict ){
-				var val = dict[key].toString()
-				fpatt2 = RegExp(val, "g");
-				str = str.replace(fpatt2,key);
-			}
-
-			// parse the packet:
-			obj = JSON.parse( str );
-			return obj['O'];
-		},
-
-		// Type
-		genTypes : function( str ){
-
-			var patt = /"Y":"(\w+?)"/gi;
-			var l = str.match(patt);
-			var dict = {};
-			for(var i=0; i<l.length; i++){
-				dict[ l[i].replace('"Y":','').replace(/"/ig,'') ] = 'a';
-			}
-			
-			var count = 0;
-			for (var key in dict) {
-			   dict[key] = ( count += 1 );
-			}
-
-			return dict;
 		}
 
 	};
@@ -1331,19 +1276,8 @@
 					return out;
 				},
 
-				/*jCjm : function(){var Q=this;
-					var out = [];
-					Q.cO.each( function(i,e){
-						if(e.serializableByParent){
-							out.push(e.jOm()); }
-					});
-					return out;
-				},*/
-			
-			
 			//-- Links -------------------------//
 			
-				//!-- Check for full fitness
 				jU : function(){var Q=this;
 					var tmpU={};var count=0;
 					for( k in Q.U ){
@@ -1361,24 +1295,6 @@
 					return tmpU;
 				},
 
-				//!-- Check for full fitness
-				/*jUm : function(){var Q=this;
-					var tmpU={};var count=0;
-					for( k in Q.U ){
-						if( Q.U[k] != null ){
-							if( Q.U[k].type() != 'aList'){
-								tmpU[k] = Q.U[k].mid;
-							}else{
-								tmpU[k] = Q.U[k].jm();
-							}
-						}
-						else
-							tmpU[k] = null;
-						count++;
-					}
-					return tmpU;
-				},*/
-			
 			//-- Parameters -------------------------//
 			
 				jP : function(){var Q=this
@@ -1388,35 +1304,16 @@
 			//-- Full -------------------------//
 			
 				jO : function(){var Q=this;
-					//var Uid = { timecreated:Q.timecreated, index:Q.index, user:Q.user};
 					var universal = false;
 					var Uid = (universal)?{R:Q.user}:{};
 					return $.extend({},{Y:Q.type(), I:Q.id()},Uid,{M: Q.getpOid(), K:Q.jCj()}, {P:Q.jP()}, {U:Q.jU()} );
 				},
 				
 				j : function(pretty){var Q=this;
-					//return JSON.stringify(Q.jO(), null, pretty||'' );
 					str = JSON.stringify(Q.jO(), null, pretty||'' );
 					str = RGX.setPos( str, 1 );
 					return RGX.decimalize0( str, 3 );
 				},
-
-				/*jOm : function(){var Q=this;
-					return $.extend({},{Y:Q.type(), I:Q.mid},{pO: Q.getpOmid(), cO:Q.jCjm()}, {P:Q.jP()}, {U:Q.jUm()} );
-				},
-
-				decimalize : function( str, prcs ){
-					patt = /\d+\.\d+/gi ;
-					fpatt = RegExp('\\d+(\\.\\d{1,'+ prcs.toString()+'})?');
-					return str.replace( patt, function(m){ return m.match(fpatt)[0] ; } );
-				},
-				
-				jm : function(pretty){var Q=this;
-					return Q.decimalize(
-						JSON.stringify(Q.jOm(), null, pretty||'' ),
-						5
-					);
-				},*/
 			
 		//-- Parameter Functions ------------------------------------------------//	
 		
