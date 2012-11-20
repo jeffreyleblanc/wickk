@@ -35,7 +35,19 @@
 			else {
 				if (typeof arg == "string") {
 					return $.parseJSON(arg);
-					this.createLineFromJson(this, jO);
+				}
+				else
+					return arg
+			}
+		};
+
+		// Special to handle cases within Wickk Serialized objects
+		function makeWJO( arg ){
+			if (arg == null)
+				return null;
+			else {
+				if (typeof arg == "string") {
+					return $.parseJSON(arg);
 				}
 				else
 					return arg
@@ -130,6 +142,105 @@
 		function Emillis(){
 			return global_elapsedFrm_millis;
 		};
+
+/////////////////////////////////////////////////////////////////
+// Regex Functions
+/////////////////////////////////////////////////////////////////
+
+	RGX = {
+
+		// Static Patterns
+		pattX  : /\d+\.\d+/gi ,
+		patt29 : /[2-9]\.\d+/gi ,
+		pattXX : /\d{2}\.\d+/gi ,
+		patt01 : /[^\d][0-1]\.\d+/gi ,
+
+		decimalize : function( str, prcs ){
+			fpatt = RegExp('\\d+(\\.\\d{1,'+ prcs.toString()+'})?');
+			return str.replace( this.pattX, function(m){ return m.match(fpatt)[0] ; } );
+		},
+
+		decimalize0 : function( str, prcs ){
+			floatpatt = RegExp('\\d+(\\.\\d{1,'+ prcs.toString()+'})?');
+			floatpatt0 = RegExp('[^\\d]\\d+(\\.0*\\d{1,'+ prcs.toString()+'})?');
+
+			str = str.replace( this.patt29, function(m){ return m.match(floatpatt)[0] ; } );
+			str = str.replace( this.pattXX, function(m){ return m.match(floatpatt)[0] ; } );
+			str = str.replace( this.patt01, function(m){ return m.match(floatpatt0)[0] ; } );
+			return str;
+		},
+
+		findObj : function( str ){
+			patt = /\{[^/{/}]+\}/gi;
+			return str.match( patt );
+		},
+
+		findPos : function( str ){
+			patt = /"pos":\{[^/{/}]+\}/gi;
+			return str.match( patt );
+		},
+
+		setPos : function( str, prcs ){
+			patt = /"pos":\{[^/{/}]+\}/gi;
+			var Q = this;
+			return str.replace( patt, function(m){ return Q.decimalize(m,prcs) ; } );
+		},
+
+		minify : function ( str ){
+			str = this.setPos( str, 1 );
+			str = this.decimalize0( str, 3 );
+
+			var dict = R.genTypes( str );
+			for ( var key in dict ){
+				var val = dict[key].toString()
+				fpatt2 = RegExp(key, "g");
+				str = str.replace(fpatt2,val);
+			}
+			var keysjson = JSON.stringify(dict, null, '' );
+			return '{"K":'+keysjson+',"O":'+str+'}';
+		},
+
+		decompressToObj : function(str){
+			// Now, instead, can we find and pull out the keys?
+			patt = /"K":\{[^/{/}]+\},/gi;
+			var k;
+			var str = str.replace(patt,function(m){k=m.replace('"K":','').replace('},','}');return '';} );
+			// Apply k to o
+			dict = JSON.parse(k)
+			for ( var key in dict ){
+				var val = dict[key].toString()
+				fpatt2 = RegExp(val, "g");
+				str = str.replace(fpatt2,key);
+			}
+
+			// parse the packet:
+			obj = JSON.parse( str );
+			return obj['O'];
+		},
+
+		// Type
+		genTypes : function( str ){
+
+			var patt = /"Y":"(\w+?)"/gi;
+			var l = str.match(patt);
+			var dict = {};
+			for(var i=0; i<l.length; i++){
+				dict[ l[i].replace('"Y":','').replace(/"/ig,'') ] = 'a';
+			}
+			
+			var count = 0;
+			for (var key in dict) {
+			   dict[key] = ( count += 1 );
+			}
+
+			return dict;
+		}
+
+	};
+
+
+
+
 
 
 
@@ -826,9 +937,9 @@
 		
 			create : function( json, flag){var Q=this;
 				if(json==undefined) return null;
-            	json = makeJO(json);
+            	json = makeWJO(json);
             	var initFlag = flag||'recreate';
-            	var TmpObj = eval('new '+json.aType+'(json,initFlag)');
+            	var TmpObj = eval('new '+json.Y+'(json,initFlag)');
             	TmpObj.link(); //!-- Note we have to explicitly call link...
             	return TmpObj;
             },
@@ -836,10 +947,10 @@
             //!-- Should make so not redundant with aCore.clone()
             clone : function( json, flag){var Q=this;
 				if(!$.isDef(json)) return null;
-            	json = makeJO(json);
+            	json = makeWJO(json);
             	var initFlag = flag||'clone';
             	//-- Make new Object and give it a new id
-					var newO = eval('new '+json.aType+'(json,initFlag)');
+					var newO = eval('new '+json.Y+'(json,initFlag)');
 					newO.setid( newO.makeid() );
 				//-- Perform linking
 					try{
@@ -949,18 +1060,18 @@
 				if(!$.isDef(a))return;
 				//-- Set flag to let downstream functions know json set
 					Q.setByJson = true;
-					a = makeJO(a); //-- Ensure we have an object
+					a = makeWJO(a);
             	//-- If we are 'recreating', sync id
             		if(initFlag=='recreate' )
-            			Q.setid(($.isDef(a.id))?a.id:Q.makeid());//-- Note Fall Back
+            			Q.setid(($.isDef(a.I))?a.I:Q.makeid());
             	//-- Iterate over P
             		Q.setP(a.P);
             	//-- Create Children
-            		if($.isDef(a.children)){
-						$.each( a.children, function(k,v){
+            		if($.isDef(a.K)){
+						$.each( a.K, function(k,v){
 							try{
 								//!-- Understood to be dangerous
-								var TmpObj = eval('new '+v.aType+'(v,initFlag)');
+								var TmpObj = eval('new '+v.Y+'(v,initFlag)');
 								Q.addC(TmpObj);
 							} catch(e){
 								C('child error in SetBy:'+Q.id());
@@ -1042,8 +1153,8 @@
 					Q.recurseC( function(ptr){
 						if($.isDef(ptr.jsonHook)){
 							if( ptr.jsonHook!=null){
-								if($.isDef(ptr.jsonHook.id)){
-									reg.registerAs(ptr, ptr.jsonHook.id);
+								if($.isDef(ptr.jsonHook.I)){
+									reg.registerAs(ptr, ptr.jsonHook.I);
 						}}}
 					});
 				return reg;
@@ -1078,8 +1189,12 @@
 			},
 			
 			makeid : function(){var Q=this;
-				if( Q.user == null) Q.user = Q.CMN().user;
-				return Q.CMN().user+'-'+time62()+'+'+Q.$class.aType+'#'+Q.$class.$count;
+				var universal = false;
+				if( universal ){
+					if( Q.user == null) Q.user = Q.CMN().user;
+					return Q.CMN().user+'-'+time62()+'+'+Q.$class.aType+'#'+Q.$class.$count;
+				}else
+					return this.CMN().Registry.count.toString();
 			},
 			
 			//!-- Could have a clone flag?
@@ -1216,14 +1331,14 @@
 					return out;
 				},
 
-				jCjm : function(){var Q=this;
+				/*jCjm : function(){var Q=this;
 					var out = [];
 					Q.cO.each( function(i,e){
 						if(e.serializableByParent){
 							out.push(e.jOm()); }
 					});
 					return out;
-				},
+				},*/
 			
 			
 			//-- Links -------------------------//
@@ -1247,7 +1362,7 @@
 				},
 
 				//!-- Check for full fitness
-				jUm : function(){var Q=this;
+				/*jUm : function(){var Q=this;
 					var tmpU={};var count=0;
 					for( k in Q.U ){
 						if( Q.U[k] != null ){
@@ -1262,7 +1377,7 @@
 						count++;
 					}
 					return tmpU;
-				},
+				},*/
 			
 			//-- Parameters -------------------------//
 			
@@ -1273,18 +1388,20 @@
 			//-- Full -------------------------//
 			
 				jO : function(){var Q=this;
-					var Uid = { timecreated:Q.timecreated, index:Q.index, user:Q.user};
-					return $.extend({},{aType:Q.type(), id:Q.id()},Uid,{parent: Q.getpOid(), children:Q.jCj()}, {P:Q.jP()}, {U:Q.jU()} );
+					//var Uid = { timecreated:Q.timecreated, index:Q.index, user:Q.user};
+					var universal = false;
+					var Uid = (universal)?{R:Q.user}:{};
+					return $.extend({},{Y:Q.type(), I:Q.id()},Uid,{M: Q.getpOid(), K:Q.jCj()}, {P:Q.jP()}, {U:Q.jU()} );
 				},
 				
 				j : function(pretty){var Q=this;
-					return JSON.stringify(Q.jO(), null, pretty||'' );
+					//return JSON.stringify(Q.jO(), null, pretty||'' );
+					str = JSON.stringify(Q.jO(), null, pretty||'' );
+					str = RGX.setPos( str, 1 );
+					return RGX.decimalize0( str, 3 );
 				},
 
-				jOm : function(){var Q=this;
-					//var Uid = { timecreated:Q.timecreated, index:Q.index, R:Q.user};
-					//return $.extend({},{Y:Q.type(), I:Q.mid},Uid,{pO: Q.getpOmid(), cO:Q.jCjm()}, {P:Q.jP()}, {U:Q.jUm()} );
-
+				/*jOm : function(){var Q=this;
 					return $.extend({},{Y:Q.type(), I:Q.mid},{pO: Q.getpOmid(), cO:Q.jCjm()}, {P:Q.jP()}, {U:Q.jUm()} );
 				},
 
@@ -1299,7 +1416,7 @@
 						JSON.stringify(Q.jOm(), null, pretty||'' ),
 						5
 					);
-				},
+				},*/
 			
 		//-- Parameter Functions ------------------------------------------------//	
 		

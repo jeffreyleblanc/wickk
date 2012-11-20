@@ -27,9 +27,9 @@
 		
 			create : function( json, flag){var Q=this;
 				if(json==undefined) return null;
-            	json = makeJO(json);
+            	json = makeWJO(json);
             	var initFlag = flag||'recreate';
-            	var TmpObj = eval('new '+json.aType+'(json,initFlag)');
+            	var TmpObj = eval('new '+json.Y+'(json,initFlag)');
             	TmpObj.link(); //!-- Note we have to explicitly call link...
             	return TmpObj;
             },
@@ -37,10 +37,10 @@
             //!-- Should make so not redundant with aCore.clone()
             clone : function( json, flag){var Q=this;
 				if(!$.isDef(json)) return null;
-            	json = makeJO(json);
+            	json = makeWJO(json);
             	var initFlag = flag||'clone';
             	//-- Make new Object and give it a new id
-					var newO = eval('new '+json.aType+'(json,initFlag)');
+					var newO = eval('new '+json.Y+'(json,initFlag)');
 					newO.setid( newO.makeid() );
 				//-- Perform linking
 					try{

@@ -34,7 +34,19 @@
 			else {
 				if (typeof arg == "string") {
 					return $.parseJSON(arg);
-					this.createLineFromJson(this, jO);
+				}
+				else
+					return arg
+			}
+		};
+
+		// Special to handle cases within Wickk Serialized objects
+		function makeWJO( arg ){
+			if (arg == null)
+				return null;
+			else {
+				if (typeof arg == "string") {
+					return $.parseJSON(arg);
 				}
 				else
 					return arg

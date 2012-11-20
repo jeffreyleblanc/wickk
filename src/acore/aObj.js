@@ -61,18 +61,18 @@
 				if(!$.isDef(a))return;
 				//-- Set flag to let downstream functions know json set
 					Q.setByJson = true;
-					a = makeJO(a); //-- Ensure we have an object
+					a = makeWJO(a);
             	//-- If we are 'recreating', sync id
             		if(initFlag=='recreate' )
-            			Q.setid(($.isDef(a.id))?a.id:Q.makeid());//-- Note Fall Back
+            			Q.setid(($.isDef(a.I))?a.I:Q.makeid());
             	//-- Iterate over P
             		Q.setP(a.P);
             	//-- Create Children
-            		if($.isDef(a.children)){
-						$.each( a.children, function(k,v){
+            		if($.isDef(a.K)){
+						$.each( a.K, function(k,v){
 							try{
 								//!-- Understood to be dangerous
-								var TmpObj = eval('new '+v.aType+'(v,initFlag)');
+								var TmpObj = eval('new '+v.Y+'(v,initFlag)');
 								Q.addC(TmpObj);
 							} catch(e){
 								C('child error in SetBy:'+Q.id());
@@ -154,8 +154,8 @@
 					Q.recurseC( function(ptr){
 						if($.isDef(ptr.jsonHook)){
 							if( ptr.jsonHook!=null){
-								if($.isDef(ptr.jsonHook.id)){
-									reg.registerAs(ptr, ptr.jsonHook.id);
+								if($.isDef(ptr.jsonHook.I)){
+									reg.registerAs(ptr, ptr.jsonHook.I);
 						}}}
 					});
 				return reg;
@@ -190,8 +190,12 @@
 			},
 			
 			makeid : function(){var Q=this;
-				if( Q.user == null) Q.user = Q.CMN().user;
-				return Q.CMN().user+'-'+time62()+'+'+Q.$class.aType+'#'+Q.$class.$count;
+				var universal = false;
+				if( universal ){
+					if( Q.user == null) Q.user = Q.CMN().user;
+					return Q.CMN().user+'-'+time62()+'+'+Q.$class.aType+'#'+Q.$class.$count;
+				}else
+					return this.CMN().Registry.count.toString();
 			},
 			
 			//!-- Could have a clone flag?
@@ -328,19 +332,8 @@
 					return out;
 				},
 
-				jCjm : function(){var Q=this;
-					var out = [];
-					Q.cO.each( function(i,e){
-						if(e.serializableByParent){
-							out.push(e.jOm()); }
-					});
-					return out;
-				},
-			
-			
 			//-- Links -------------------------//
 			
-				//!-- Check for full fitness
 				jU : function(){var Q=this;
 					var tmpU={};var count=0;
 					for( k in Q.U ){
@@ -358,24 +351,6 @@
 					return tmpU;
 				},
 
-				//!-- Check for full fitness
-				jUm : function(){var Q=this;
-					var tmpU={};var count=0;
-					for( k in Q.U ){
-						if( Q.U[k] != null ){
-							if( Q.U[k].type() != 'aList'){
-								tmpU[k] = Q.U[k].mid;
-							}else{
-								tmpU[k] = Q.U[k].jm();
-							}
-						}
-						else
-							tmpU[k] = null;
-						count++;
-					}
-					return tmpU;
-				},
-			
 			//-- Parameters -------------------------//
 			
 				jP : function(){var Q=this
@@ -385,35 +360,15 @@
 			//-- Full -------------------------//
 			
 				jO : function(){var Q=this;
-					var Uid = { timecreated:Q.timecreated, index:Q.index, user:Q.user};
-					return $.extend({},{aType:Q.type(), id:Q.id()},Uid,{parent: Q.getpOid(), children:Q.jCj()}, {P:Q.jP()}, {U:Q.jU()} );
+					var universal = false;
+					var Uid = (universal)?{R:Q.user}:{};
+					return $.extend({},{Y:Q.type(), I:Q.id()},Uid,{M: Q.getpOid(), K:Q.jCj()}, {P:Q.jP()}, {U:Q.jU()} );
 				},
 				
 				j : function(pretty){var Q=this;
-					return JSON.stringify(Q.jO(), null, pretty||'' );
-				},
-
-				jOm : function(){var Q=this;
-					//var Uid = { timecreated:Q.timecreated, index:Q.index, R:Q.user};
-					//return $.extend({},{Y:Q.type(), I:Q.mid},Uid,{pO: Q.getpOmid(), cO:Q.jCjm()}, {P:Q.jP()}, {U:Q.jUm()} );
-
-					return $.extend({},{Y:Q.type(), I:Q.mid},{pO: Q.getpOmid(), cO:Q.jCjm()}, {P:Q.jP()}, {U:Q.jUm()} );
-				},
-
-				decimalize : function( str, prcs ){
-					patt = /\d+\.\d+/gi ;
-					fpatt = RegExp('\\d+(\\.\\d{1,'+ prcs.toString()+'})?');
-					return str.replace( patt, function(m){ return m.match(fpatt)[0] ; } );
-				},
-
-				// match only { ... }
-				// patt = /\{[^/{/}]+\}/gi
-				
-				jm : function(pretty){var Q=this;
-					return Q.decimalize(
-						JSON.stringify(Q.jOm(), null, pretty||'' ),
-						5
-					);
+					str = JSON.stringify(Q.jO(), null, pretty||'' );
+					str = RGX.setPos( str, 1 );
+					return RGX.decimalize0( str, 3 );
 				},
 			
 		//-- Parameter Functions ------------------------------------------------//	
