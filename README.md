@@ -8,6 +8,5 @@ License coming soon, but will be in line with standard 'opensource' projects.
 
 Uses
 jquery
-dumpvals
 Also
 http://p.yusukekamiyamane.com/fonts/
