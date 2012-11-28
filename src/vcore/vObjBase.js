@@ -69,6 +69,7 @@
 					try{
 						ptr.setCnvs(this.cnvs);
 					} catch(e) {}
+					return ptr;
 				},
 			
 			//-- Render --------------------------------//
