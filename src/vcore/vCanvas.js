@@ -113,6 +113,7 @@
 			addC : function( ptr ){			
 				this.$super(ptr);
 				ptr.setCnvs( this );
+				return ptr;
 			},
 		
 		//-- Render --------------------------------//
